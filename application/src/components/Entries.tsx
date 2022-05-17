@@ -1,19 +1,23 @@
 import { Table } from "@mantine/core";
+import { useEffect, useState } from "react";
 import { TimeDisplay } from "./Input";
 
-const elements = [
-  { project: "Dummy1", time: <TimeDisplay time={"21:00"} /> },
-  { project: "Dummy2", time: <TimeDisplay time={"05:01"} /> },
-  { project: "Dummy3", time: <TimeDisplay time={"08:06"} /> },
-  { project: "Dummy4", time: <TimeDisplay time={"31:20"} /> },
-  { project: "Dummy5", time: <TimeDisplay time={"03:00"} /> },
-];
-
 export default function Entries() {
-  const rows = elements.map((element) => (
-    <tr key={element.project}>
-      <td width="1506">{element.project}</td>
-      <td>{element.time}</td>
+  const [backendData, setBackendData] = useState<any>([{}]);
+
+  useEffect(() => {
+    fetch("/api")
+      .then((response) => response.json())
+      .then((data) => {
+        setBackendData(data);
+        console.log(data);
+      });
+  }, []);
+
+  const rows = backendData.map((backendData: any) => (
+    <tr key={backendData.project}>
+      <td width="1506">{backendData.project}</td>
+      <td>{backendData.time}</td>
     </tr>
   ));
   return (
